@@ -1,0 +1,39 @@
+{
+	"success": true,
+	"rowset": [
+		{
+			"nroDirDestino": 61591,
+			"nomDestino": "CLIENTE ALCOHOLES",
+			"descripcionRuta": "REPARTO",
+			"nroCarga": 2,
+			"codRuta": "REP",
+			"depPlanificacion": "    AZ1-OING",
+			"nroZona": "BBL",
+			"secParadas": 0
+		},
+		{
+			"nroDirDestino": 61591,
+			"nomDestino": "CLIENTE ALCOHOLES",
+			"descripcionRuta": "REPARTO",
+			"nroCarga": 2,
+			"codRuta": "REP",
+			"depPlanificacion": "    AZ1-OING",
+			"nroZona": "BBL",
+			"secParadas": 1
+		},
+		{
+			"nroDirDestino": 61591,
+			"nomDestino": "CLIENTE ALCOHOLES",
+			"descripcionRuta": "REPARTO",
+			"nroCarga": 2,
+			"codRuta": "REP",
+			"depPlanificacion": "    AZ1-OING",
+			"nroZona": "BBL",
+			"secParadas": 2
+		}
+	],
+	"tokenExpirado": false,
+	"data": null,
+	"errorJde": false,
+	"errorsList": []
+}
