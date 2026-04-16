@@ -1,8 +1,14 @@
 {
-    "token": "T044LFVnK8yRZ27OQ+aElORidCq48mf3SxOeBuvmbSsPKxU=MDE5MDEzMTI2Mjk5NzA3Mzk1NjQxMDIzNzE3Mi4zMC4zMC4xNDExNzM1NjQ3NzIyNDMz",
+    "token": "0445Gz39M/9DHtR76lTC8NolURs9BQdkJKIIB1IUhhMOj0=MDE4MDEyNjA1NTYxMDkwMTkzMDI0MjUwMTcyLjMwLjMwLjMwMTc2OTAxMjkxMzcwNg==",
     "nroProveedor": "",
-    "nroCarga": "2",
+    "nroCarga": "",
     "depPlanificacion": "AZ1-OING",
-    "P49271_Version": "SEA0001"
+    "P49271_Version": "SEA0001",
+    "rolesJDE": [
+        {
+            "rol": "ABA_SOL"
+        }
+    ],
+    "seguridadInclusiva": true,
+    "seguridadCCActivada":true
   }
-  
