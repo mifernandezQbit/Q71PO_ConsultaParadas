@@ -5,6 +5,9 @@ import requests
 
 from fdk import response
 
+
+from utilidades.seguridad.core import verificarSeguridadMCU
+
 def handler(ctx, data: io.BytesIO = None):
     try:
         cfg = ctx.Config()
@@ -14,10 +17,8 @@ def handler(ctx, data: io.BytesIO = None):
     except (Exception, ValueError) as ex:
         logging.getLogger().info('error parsing json payload: ' + str(ex))
 
-    logging.getLogger().info('Params: ' + str(params))
 
     respuesta   = sendQuery(params, url, 'Q71PO_ORCH_ConsultaParadas')
-    logging.getLogger().info(respuesta)
     respJson    = respuesta.json()
     if (respuesta.status_code == 444):
         respJson = {
@@ -29,7 +30,8 @@ def handler(ctx, data: io.BytesIO = None):
             "errorsList"      : []
         }
     else:
-        respJson    = procesarRespuesta(respJson)
+        ##respJson    = procesarRespuesta(respJson)
+        respJson    = procesarRespuesta(respJson, params['seguridadInclusiva'] if 'seguridadInclusiva' in params else False,  params['seguridadCCActivada'] if 'seguridadCCActivada' in params else False)
     return response.Response(
         ctx, response_data=json.dumps(respJson),
         headers={"Content-Type": "application/json"}
@@ -44,19 +46,19 @@ def sendQuery(params, urlOrc, orchestation):
     
     return resp
 
-def procesarRespuesta(respuesta):
+def procesarRespuesta(respuesta, seguridadInclusiva,seguridadCCActivada):
     try:
         resultado = {}
         errorsList=[]
-        logging.getLogger().info(respuesta)
-        logging.getLogger().info(type(respuesta))
         if ("jde__status" in respuesta):
             if ((respuesta['jde__status']).strip() == "SUCCESS" or (respuesta['jde__status'].strip() == "WARN" )):
                 if "rowset" in respuesta:
-                    rowset = respuesta["rowset"]
+                    rangoMCU=[]
+                    if 'rangoMCU' in respuesta:
+                        rangoMCU=respuesta['rangoMCU']
                     resultado = {
                         "success"         : True,
-                        "rowset"          : rowset,
+                        "rowset"          : transformarRespuesta(respuesta["rowset"],seguridadInclusiva,rangoMCU, seguridadCCActivada),##rowset,
                         "tokenExpirado"   : False,
                         "data"            : None,
                         "errorJde"        : False,
@@ -138,3 +140,20 @@ def procesarErrores(respuesta):
     errorsList  = extraerErrores(respuesta)
     logging.getLogger().info(errorsList)
     return errorsList
+
+
+
+def transformarRespuesta(lista,seguridadInclusiva, rangoMCU, seguridadCCActivada):
+    listaEditada = []
+    for rowset in lista:
+       
+        ## verifico seguridad por centro de costos
+        #if len(rangoMCU)>0:
+        if seguridadCCActivada:
+            if ('depositoEnvio' in rowset and verificarSeguridadMCU(rowset['depositoEnvio'],seguridadInclusiva,rangoMCU) ) :
+                listaEditada.append(rowset)
+        else:
+            ## No está configurada en jde seguridad por centro de costos, se incluye registro
+            listaEditada.append(rowset)
+                
+    return listaEditada
