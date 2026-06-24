@@ -27,3 +27,19 @@ def verificarSeguridadMCU(mcu,inclusiva=False, rangoMCU=[]):
 
     # Dependiendo si es inclusiva o exclusiva respondemos 
     return existe if inclusiva else not existe
+
+def completarRequestSeguridad(json,accion):
+
+    jsonCompleto = json
+    # verificar si seguridad está activada
+    if 'seguridadCCActivada' in jsonCompleto and jsonCompleto['seguridadCCActivada']:
+        # verificar tipo de seguridad y determinar valor a buscar
+        if 'seguridadInclusiva' in jsonCompleto and jsonCompleto['seguridadInclusiva']:
+            jsonCompleto['valorAccionCC']='Y'
+        else:
+            jsonCompleto['valorAccionCC']='N'
+        
+        # asignar acción JDE
+        jsonCompleto['accionJDE']=accion
+
+    return jsonCompleto
