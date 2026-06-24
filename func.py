@@ -7,6 +7,7 @@ from fdk import response
 
 
 from utilidades.seguridad.core import verificarSeguridadMCU
+from utilidades.seguridad.core import completarRequestSeguridad
 
 def handler(ctx, data: io.BytesIO = None):
     try:
@@ -40,7 +41,9 @@ def handler(ctx, data: io.BytesIO = None):
 def sendQuery(params, urlOrc, orchestation):
     url = urlOrc + '/v3/orchestrator/' + orchestation
     try:
-        resp    = requests.post(url, json= params)
+        #MIF se agregan parámetros al request para poder recuperar rangos de MCU de acuerdo a la acción
+        auth_data =  completarRequestSeguridad(params,"I")
+        resp    = requests.post(url, json= auth_data)
     except Exception as e:
         resp = "Falló: " + str(e)
     
